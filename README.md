@@ -18,3 +18,8 @@ Options:
 	-h, --help
 		Show this help message and exit
 ```
+
+There is also a set of example files located in the Test_Files directory and the following command can be executed:
+```
+Rscript --vanilla CCDI_to_CDS_converteR.R -f Test_Files/EXAMPLE_ccdi_Submission_Template.xlsx -t Test_Files/EXAMPLE_CDS_submission_metadata_template.xlsx
+```
