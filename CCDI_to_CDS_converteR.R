@@ -115,7 +115,7 @@ for (sheet in sheet_names){
     select(-type)%>%
     mutate(across(everything(), as.character))
   df_empty_test=remove_empty(df_empty_test,c("rows","cols"))
-
+  
   if (dim(df_empty_test)[1]>0){
     workbook_list=append(x = workbook_list,values = list(df_empty_test))
     names(workbook_list)[length(workbook_list)]<-sheet
@@ -198,7 +198,7 @@ for (paths in 1:length(node_paths)){
   num=length(node_paths[[paths]]) 
   if (num < max_num){
     num_add=max_num-num
-      link_vec=c(rep(NA,num_add),link_vec)
+    link_vec=c(rep(NA,num_add),link_vec)
   }
   for(x in 1:max_num){
     links_add[x]=link_vec[x]
@@ -253,7 +253,7 @@ for (col_num in 1:(dim(links)[2]-1)){
     }
   }
 }
-    
+
 #Pull out the new data frame from the amalgamation of all data frames being applied to the study data frame.
 df_all=list_of_all["study"][[1]]
 df_all=remove_empty(dat = df_all, which = "cols")
@@ -335,8 +335,19 @@ for (colname in colnames(df_metadata)){
 }
 
 #For column names that differ from CCDI to CDS
-#This will have to be a hard coded list of columns
+#This will have to be a hard coded list of columns:
 df_metadata_add$bases=df_all$number_of_bp
+                 
+
+
+#Check the number of files that were imported and in the output. The CDS template is file oriented, so the two checks should return the same number.
+input_file_length=length(grep(pattern = "file_url_in_cds", x = names(unlist(workbook_list, recursive = T))))
+output_file_length=length(df_metadata_add$file_url_in_cds)
+
+if(input_file_length!=output_file_length){
+  cat(paste("\nThe number of files in the input file, ",input_file_length,", does not equal the number of files in the output file, ",output_file_length,".\n\nThis is likely due to incorrect or missing links between nodes. Please check to make sure the expected link ids are present and the strings are identical between nodes.\n\n",sep = ""))
+}
+
 
 ############
 #
