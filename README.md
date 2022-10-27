@@ -6,7 +6,7 @@ Run the following command in a terminal where R is installed for help.
 Rscript --vanilla CCDI_to_CDS_converteR.R -h
 Usage: CCDI_to_CDS_converteR.R [options]
 
-CCDI_to_CDS_converteR v.1.3.1
+CCDI_to_CDS_converteR v.2.0.0
 
 Options:
 	-f CHARACTER, --file=CHARACTER
