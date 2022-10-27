@@ -87,15 +87,21 @@ cat("The CCDI data template is being converted at this time.\n\n")
 ###########
 
 #Rework the file path to obtain a file name, this will be used for the output file.
-file_name=stri_reverse(stri_split_fixed(str = (stri_split_fixed(str = stri_reverse(file_path), pattern="/",n = 2)[[1]][1]),pattern = ".", n=2)[[1]][2])
+file_name=stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][2])
 
-ext=tolower(stri_reverse(stri_split_fixed(str = stri_reverse(file_path),pattern = ".",n=2)[[1]][1]))
+ext=tolower(stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][1]))
 
-path=paste(stri_reverse(stri_split_fixed(str = stri_reverse(file_path), pattern="/",n = 2)[[1]][2]),"/",sep = "")
+path=paste(dirname(file_path),"/",sep = "")
+
+
 
 #Output file name based on input file name and date/time stamped.
 output_file=paste(file_name,
-                  "_CDS_template_",
+                  "_CDSTemplate",
+                  stri_replace_all_fixed(
+                    str = Sys.Date(),
+                    pattern = "-",
+                    replacement = ""),
                   sep="")
 
 #Read in CDS metadata template
@@ -362,4 +368,4 @@ writeData(wb=wb, sheet="Metadata", df_metadata_add)
 
 openxlsx::saveWorkbook(wb = wb,file = paste(path,output_file,".xlsx",sep = ""), overwrite = T)
 
-cat(paste("\n\nThe output file can be found in the same directory as the input file: ", path,"\n\n",sep = ""))
+cat(paste("\n\nProcess Complete.\n\nThe output file can be found here: ",path,"\n\n",sep = "")) 
