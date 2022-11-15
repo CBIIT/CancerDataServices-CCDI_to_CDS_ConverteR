@@ -364,7 +364,7 @@ if(input_file_length!=output_file_length){
 #Open the template, create a workbook, apply the data, write out a new output file based on the template. 
 wb=openxlsx::loadWorkbook(file = template_path)
 
-deleteData(wb, sheet = "Metadata",rows = 1:dim(df_metadata)[1],cols=1:dim(df_metadata)[2],gridExpand = TRUE)
+deleteData(wb, sheet = "Metadata",rows = 1:(dim(df_metadata)[1]+1),cols=1:(dim(df_metadata)[2]+1),gridExpand = TRUE)
 
 writeData(wb=wb, sheet="Metadata", df_metadata_add)
 
