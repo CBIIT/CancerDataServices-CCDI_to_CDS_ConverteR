@@ -89,8 +89,6 @@ cat("The CCDI data template is being converted at this time.\n\n")
 #Rework the file path to obtain a file name, this will be used for the output file.
 file_name=stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][2])
 
-ext=tolower(stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][1]))
-
 path=paste(dirname(file_path),"/",sep = "")
 
 
@@ -128,7 +126,10 @@ for (sheet in sheet_names){
   }
 }
 
-
+rm(file_name)
+rm(df_empty_test)
+rm(sheet_names)
+rm(sheet)
 ###########
 #
 # WORKING PATH DISCOVERY
@@ -176,12 +177,23 @@ for (link in everything_links){
   }
 }
 
+rm(node_path)
+rm(next_node)
+rm(link)
+rm(link_counter)
+rm(node)
+rm(while_counter)
+rm(restart_link)
+rm(linking_prop)
+
 #Determine each path and end with the study node. THIS ASSUMES STUDY NODE IS THE TOP MOST TERMINAL NODE.
 for (vec in 1:length(names(node_paths))){
   vec_node= node_paths[vec][[1]][1]
   node_paths[vec][[1]]=c(node_paths[vec][[1]],"study")
   names(node_paths)[vec]<-vec_node
 }
+
+rm(vec)
 
 #Determine the longest path
 max_num=0
@@ -193,6 +205,7 @@ for (paths in 1:length(node_paths)){
     max_num=num
   }
 }
+
 
 #Create a data frame with the longest path as columns
 links=data.frame(matrix(data = NA,nrow = 0,ncol = max_num))
@@ -212,7 +225,15 @@ for (paths in 1:length(node_paths)){
   links=rbind(links, links_add)
 }
 
-
+rm(paths)
+rm(max_num)
+rm(num)
+rm(num_add)
+rm(x)
+rm(vec_node)
+rm(link_vec)
+rm(node_paths)
+rm(links_add)
 ###############
 #
 # Data path connection via walking
@@ -251,10 +272,12 @@ for (col_num in 1:(dim(links)[2]-1)){
         df_edit_level_only= remove_empty(dat = df_edit_level_only, c("rows"))
         df_edit_level_only=suppressMessages(left_join(df_edit_level_only,df_mod_level))
         list_of_all[next_node][[1]]=bind_rows(list_of_all[next_node][[1]],df_edit_level_only)
+        list_of_all[next_node][[1]]=unique(list_of_all[next_node][[1]])
       }else{
         df_edit=list_of_all[next_node][[1]]
         df_edit=suppressMessages(left_join(df_edit,df_mod_level))
         list_of_all[next_node][[1]]=df_edit
+        list_of_all[next_node][[1]]=unique(list_of_all[next_node][[1]])
       }
     }
   }
