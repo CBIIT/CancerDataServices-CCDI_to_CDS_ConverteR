@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-#Cancer Data Services - CCDI_to_CDS_converteR v1.3.1
+#Cancer Data Services - CCDI_to_CDS_converteR v2.0.0
 
 
 ##################
@@ -116,15 +116,23 @@ workbook_list=list()
 
 #create a list of all node pages with data
 for (sheet in sheet_names){
+  #read the sheet
   df=readWorkbook(xlsxFile = file_path,sheet = sheet)
+  #create an emptier version that removes the type and makes everything a character
   df_empty_test=df%>%
     select(-type)%>%
     mutate(across(everything(), as.character))
+  #remove empty rows and columns
   df_empty_test=remove_empty(df_empty_test,c("rows","cols"))
   
+  #if there are at least one row in the resulting data frame, add it
   if (dim(df_empty_test)[1]>0){
-    workbook_list=append(x = workbook_list,values = list(df_empty_test))
-    names(workbook_list)[length(workbook_list)]<-sheet
+    #if the only columns in the resulting data frame are only linking properties (node.node_id), do not add it.
+    if (any(!grepl(pattern = "\\.",x = colnames(df_empty_test)))){
+      #add the data frame to the workbook
+      workbook_list=append(x = workbook_list,values = list(df_empty_test))
+      names(workbook_list)[length(workbook_list)]<-sheet
+    }
   }
 }
 
@@ -224,9 +232,17 @@ done_nodes=c()
 
 #For each column, starting at the longest path, work through the connections at that level, for each connection in that node. Apply and expand that information to the parent node and then remove that node from the pool of possibilities, if it shows up later in the sequence of paths.
 for (col_num in 1:(dim(links)[2]-1)){
+  #get list of nodes to be added
   working_rows=grep(pattern = TRUE, x = !is.na(links[,col_num]))
   working_rows_names=unique(links[,col_num][working_rows])
   working_rows_names=working_rows_names[!working_rows_names %in% done_nodes]
+  df_working_rows=data.frame(nodes=working_rows_names)
+  #for the resulting list, order them from the most rows to the least, this helps keep joining of rows logic more sound as changes will always be applied to the largest data set first.
+  for (node in working_rows_names){
+    row_pos=grep(pattern = TRUE, x = df_working_rows$nodes %in% node)
+    df_working_rows[row_pos,"size"]=dim(list_of_all[node][[1]])[1]
+  }
+  working_rows_names=arrange(df_working_rows, desc(size))$nodes
   for (node in working_rows_names){
     done_nodes=c(done_nodes, node)
     df_mod_level=list_of_all[node][[1]]
