@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-#Cancer Data Services - CCDI_to_CDS_converteR v2.0.0
+#Cancer Data Services - CCDI_to_CDS_converteR v2.0.1
 
 
 ##################
@@ -60,7 +60,7 @@ option_list = list(
 )
 
 #create list of options and values for file input
-opt_parser = OptionParser(option_list=option_list, description = "\nCCDI_to_CDS_converteR v2.0.0")
+opt_parser = OptionParser(option_list=option_list, description = "\nCCDI_to_CDS_converteR v2.0.1")
 opt = parse_args(opt_parser)
 
 #If no options are presented, return --help, stop and print the following message.
