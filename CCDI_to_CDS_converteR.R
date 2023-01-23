@@ -312,6 +312,43 @@ for (personnel in personnel_cols){
 #Ensure the new data frame is unique.
 df_all=unique(df_all)
 
+#Special case for sample_diagnosis_id being merged into diagnosis_id for CDS format
+
+diag_col=grep(pattern = TRUE, x = colnames(df_metadata) %in% "DIAGNOSIS")+1
+treat_col=grep(pattern = TRUE, x = colnames(df_metadata) %in% "TREATMENT")-1
+
+diagnosis_cols=colnames(df_metadata)[diag_col:treat_col]
+diagnosis_cols=colnames(df_all)[colnames(df_all) %in% diagnosis_cols]
+
+
+if ("sample_diagnosis_id" %in% colnames(df_all)){
+  for (uniq_participant in unique(df_all$participant_id)){
+    locations=grep(pattern = TRUE, x = df_all$participant_id %in% uniq_participant)
+    
+    for (location in locations){
+      # if there is a value for sample_diagnosis, move the sample_diagnosis_id to diagnosis_id
+      if (!is.na(df_all[location,]$sample_diagnosis_id)){
+        if (is.na(df_all[location,]$diagnosis_id)){
+          df_all[location,]$diagnosis_id=df_all[location,]$sample_diagnosis_id
+        }
+        # if there is a diagnosis_id and there are no sample_diagnosis_ids, then it is safe to assume that values from diagnosis_id should be applied to all rows that are empty for the diagnosis properties. WARNING: This may have unexpected results for participants with multiple diagnoses.
+      }else if (!is.na(df_all[location,]$diagnosis_id)){
+        update_locations=locations[!locations %in% location]
+        # if (any(is.na(df_all[update_locations,]$sample_diagnosis_id))){
+        for (update_location in update_locations){
+          if (is.na(df_all[update_location,]$sample_diagnosis_id) & is.na(df_all[update_location,]$diagnosis_id) & !is.na(df_all[update_location,]$library_id)){
+            for (update_col in diagnosis_cols){
+              df_all[update_location,update_col]=df_all[location,update_col]
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
 #Progress bar setup
 pb=txtProgressBar(min=0,max=length(unique(df_all$file_url_in_cds)),style = 3)
 position=0
@@ -348,6 +385,7 @@ df_all=unique(df_all)
 #Create a data frame based on the template that was supplied.
 df_metadata_add=data.frame(matrix(NA,nrow=dim(df_all)[1],ncol = dim(df_metadata)[2]))
 colnames(df_metadata_add)<-colnames(df_metadata)
+df_metadata_add$GUID<-NA
 
 #Move data from the CCDI flatten template over to the CDS template where it is 1:1 colnames.
 for (colname in colnames(df_metadata)){
@@ -359,6 +397,7 @@ for (colname in colnames(df_metadata)){
 #For column names that differ from CCDI to CDS
 #This will have to be a hard coded list of columns:
 df_metadata_add$bases=df_all$number_of_bp
+df_metadata_add$GUID=df_all$dcf_indexd_guid
                  
 
 
