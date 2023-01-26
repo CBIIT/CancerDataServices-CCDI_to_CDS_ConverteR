@@ -398,7 +398,8 @@ for (colname in colnames(df_metadata)){
 #This will have to be a hard coded list of columns:
 df_metadata_add$bases=df_all$number_of_bp
 df_metadata_add$GUID=df_all$dcf_indexd_guid
-                 
+df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
+
 
 
 #Check the number of files that were imported and in the output. The CDS template is file oriented, so the two checks should return the same number.
