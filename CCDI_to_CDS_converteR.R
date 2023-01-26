@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-#Cancer Data Services - CCDI_to_CDS_converteR v2.0.1
+#Cancer Data Services - CCDI_to_CDS_converteR v2.0.3
 
 
 ##################
@@ -60,7 +60,7 @@ option_list = list(
 )
 
 #create list of options and values for file input
-opt_parser = OptionParser(option_list=option_list, description = "\nCCDI_to_CDS_converteR v2.0.2")
+opt_parser = OptionParser(option_list=option_list, description = "\nCCDI_to_CDS_converteR v2.0.3")
 opt = parse_args(opt_parser)
 
 #If no options are presented, return --help, stop and print the following message.
@@ -398,7 +398,8 @@ for (colname in colnames(df_metadata)){
 #This will have to be a hard coded list of columns:
 df_metadata_add$bases=df_all$number_of_bp
 df_metadata_add$GUID=df_all$dcf_indexd_guid
-                 
+df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
+
 
 
 #Check the number of files that were imported and in the output. The CDS template is file oriented, so the two checks should return the same number.
