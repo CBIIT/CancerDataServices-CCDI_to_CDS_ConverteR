@@ -261,7 +261,7 @@ for (col_num in 1:(dim(links)[2]-1)){
       df_mod_level=unique(df_mod_level)
       colname_test=grep(pattern = TRUE, (colnames(df_mod_level)%in%colnames(list_of_all[next_node][[1]])))
       #This path is if there are 4 or more columns names that are in common with the parent data frame. This is to avoid duplicate columns for data file nodes (file_name_1, file_name_2, instead of just file_name). This does then assume that most nodes that are not data file nodes contain their own unique columns.
-      if (length(colname_test)>3){
+      if (length(colname_test)>=3){
         df_edit=list_of_all[next_node][[1]]
         df_edit_level_only= df_edit[,colnames(df_edit) %in% colnames(workbook_list[next_node][[1]])]
         df_edit_level_only= remove_empty(dat = df_edit_level_only, c("rows"))
