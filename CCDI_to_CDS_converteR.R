@@ -320,9 +320,16 @@ treat_col=grep(pattern = TRUE, x = colnames(df_metadata) %in% "TREATMENT")-1
 diagnosis_cols=colnames(df_metadata)[diag_col:treat_col]
 diagnosis_cols=colnames(df_all)[colnames(df_all) %in% diagnosis_cols]
 
+#Progress bar setup
+cat('Fixing diagnosis information:\n')
+pb=txtProgressBar(min=0,max=length(unique(df_all$participant_id)),style = 3)
+position=0
+cat('\n')
 
 if ("sample_diagnosis_id" %in% colnames(df_all)){
   for (uniq_participant in unique(df_all$participant_id)){
+    position=position+1
+    setTxtProgressBar(pb,position)
     locations=grep(pattern = TRUE, x = df_all$participant_id %in% uniq_participant)
     
     for (location in locations){
@@ -350,8 +357,10 @@ if ("sample_diagnosis_id" %in% colnames(df_all)){
 
 
 #Progress bar setup
+cat('\nFixing file information:\n')
 pb=txtProgressBar(min=0,max=length(unique(df_all$file_url_in_cds)),style = 3)
 position=0
+cat('\n')
 
 # If there are some properties for a file, that is not found in the other row with the same file url, make them equal. The url was chosen as this ensures that there are no name clashes as they have to exist in a unique location, while file name would only do a portion of this, and duplicates of a form can give the same md5sum. This will then unique out in a later step.
 for (file_url in unique(df_all$file_url_in_cds)){
