@@ -408,7 +408,15 @@ for (colname in colnames(df_metadata)){
 df_metadata_add$bases=df_all$number_of_bp
 df_metadata_add$GUID=df_all$dcf_indexd_guid
 df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
+df_metadata_add$disease_type=df_all$diagnosis_icd_o
 
+
+#fix disease_type to only contain Term and remove code.
+for (x in 1:dim(df_metadata_add)[1]){
+  if (!is.na(df_metadata_add$disease_type[x])){
+    df_metadata_add$disease_type[x]=stri_split_fixed(str = df_metadata_add$disease_type[x], pattern = " : ", n = 2)[[1]][2]
+  }
+}
 
 
 #Check the number of files that were imported and in the output. The CDS template is file oriented, so the two checks should return the same number.
