@@ -412,9 +412,11 @@ df_metadata_add$disease_type=df_all$diagnosis_icd_o
 
 
 #fix disease_type to only contain Term and remove code.
-for (x in 1:dim(df_metadata_add)[1]){
-  if (!is.na(df_metadata_add$disease_type[x])){
-    df_metadata_add$disease_type[x]=stri_split_fixed(str = df_metadata_add$disease_type[x], pattern = " : ", n = 2)[[1]][2]
+if (!is.null(df_metadata_add$disease_type)){
+  for (x in 1:dim(df_metadata_add)[1]){
+    if (!is.na(df_metadata_add$disease_type[x])){
+      df_metadata_add$disease_type[x]=stri_split_fixed(str = df_metadata_add$disease_type[x], pattern = " : ", n = 2)[[1]][2]
+    }
   }
 }
 
