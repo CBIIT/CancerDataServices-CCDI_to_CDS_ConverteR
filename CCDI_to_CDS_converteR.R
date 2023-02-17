@@ -320,13 +320,12 @@ treat_col=grep(pattern = TRUE, x = colnames(df_metadata) %in% "TREATMENT")-1
 diagnosis_cols=colnames(df_metadata)[diag_col:treat_col]
 diagnosis_cols=colnames(df_all)[colnames(df_all) %in% diagnosis_cols]
 
-#Progress bar setup
-cat('Fixing diagnosis information:\n')
-pb=txtProgressBar(min=0,max=length(unique(df_all$participant_id)),style = 3)
-position=0
-cat('\n')
-
 if ("sample_diagnosis_id" %in% colnames(df_all)){
+  #Progress bar setup
+  cat('Fixing diagnosis information:\n')
+  pb=txtProgressBar(min=0,max=length(unique(df_all$participant_id)),style = 3)
+  position=0
+  cat('\n')
   for (uniq_participant in unique(df_all$participant_id)){
     position=position+1
     setTxtProgressBar(pb,position)
@@ -409,6 +408,8 @@ df_metadata_add$bases=df_all$number_of_bp
 df_metadata_add$GUID=df_all$dcf_indexd_guid
 df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
 df_metadata_add$disease_type=df_all$diagnosis_icd_o
+df_metadata_add$dbGaP_subject_id=df_all$alternate_subject_id
+df_metadata_add$biosample_accession=df$all$alternate_sample_id
 
 
 #fix disease_type to only contain Term and remove code.
