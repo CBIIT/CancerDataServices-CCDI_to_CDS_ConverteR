@@ -265,11 +265,11 @@ for (col_num in 1:(dim(links)[2]-1)){
         df_edit=list_of_all[next_node][[1]]
         df_edit_level_only= df_edit[,colnames(df_edit) %in% colnames(workbook_list[next_node][[1]])]
         df_edit_level_only= remove_empty(dat = df_edit_level_only, c("rows"))
-        df_edit_level_only=suppressMessages(left_join(df_edit_level_only,df_mod_level))
+        df_edit_level_only=suppressMessages(left_join(df_edit_level_only,df_mod_level, multiple ="all"))
         list_of_all[next_node][[1]]=bind_rows(list_of_all[next_node][[1]],df_edit_level_only)
       }else{
         df_edit=list_of_all[next_node][[1]]
-        df_edit=suppressMessages(left_join(df_edit,df_mod_level))
+        df_edit=suppressMessages(left_join(df_edit,df_mod_level, multiple ="all"))
         list_of_all[next_node][[1]]=df_edit
       }
     }
