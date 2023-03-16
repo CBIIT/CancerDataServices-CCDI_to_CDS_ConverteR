@@ -405,7 +405,7 @@ for (colname in colnames(df_metadata)){
 #For column names that differ from CCDI to CDS
 #This will have to be a hard coded list of columns:
 df_metadata_add$bases=df_all$number_of_bp
-df_metadata_add$GUID=df_all$dcf_indexd_guid
+df_metadata_add$guid=df_all$dcf_indexd_guid
 df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
 df_metadata_add$disease_type=df_all$diagnosis_icd_o
 df_metadata_add$dbGaP_subject_id=df_all$alternate_subject_id
