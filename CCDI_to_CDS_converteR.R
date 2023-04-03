@@ -393,7 +393,7 @@ df_all=unique(df_all)
 #Create a data frame based on the template that was supplied.
 df_metadata_add=data.frame(matrix(NA,nrow=dim(df_all)[1],ncol = dim(df_metadata)[2]))
 colnames(df_metadata_add)<-colnames(df_metadata)
-df_metadata_add$GUID<-NA
+df_metadata_add$guid<-NA
 
 #Move data from the CCDI flatten template over to the CDS template where it is 1:1 colnames.
 for (colname in colnames(df_metadata)){
