@@ -404,12 +404,70 @@ for (colname in colnames(df_metadata)){
 
 #For column names that differ from CCDI to CDS
 #This will have to be a hard coded list of columns:
-df_metadata_add$bases=df_all$number_of_bp
-df_metadata_add$guid=df_all$dcf_indexd_guid
-df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
-df_metadata_add$disease_type=df_all$diagnosis_icd_o
-df_metadata_add$dbGaP_subject_id=df_all$alternate_subject_id
-df_metadata_add$biosample_accession=df$all$alternate_sample_id
+#The setup has to be check if null, if not, apply column, otherwise NA
+if (!is.null(df_all$number_of_bp)){
+  df_metadata_add$bases=df_all$number_of_bp
+}else{
+  df_metadata_add$bases<-NA
+}
+
+if (!is.null(df_all$dcf_indexd_guid)){
+  df_metadata_add$guid=df_all$dcf_indexd_guid
+}else{
+  df_metadata_add$guid<-NA
+}
+
+if (!is.null(df_all$participant_age_at_collection)){
+  df_metadata_add$sample_age_at_collection=df_all$participant_age_at_collection
+}else{
+  df_metadata_add$sample_age_at_collection<-NA
+}
+
+if (!is.null(df_all$diagnosis_icd_o)){
+  df_metadata_add$disease_type=df_all$diagnosis_icd_o
+}else{
+  df_metadata_add$disease_type<-NA
+}
+
+if (!is.null(df_all$diagnosis_icd_o)){
+  df_metadata_add$disease_type=df_all$diagnosis_icd_o
+}else{
+  df_metadata_add$disease_type<-NA
+}
+
+if (!is.null(df_all$alternate_subject_id)){
+  df_metadata_add$dbGaP_subject_id=df_all$alternate_subject_id
+}else{
+  df_metadata_add$dbGaP_subject_id<-NA
+}
+
+if (!is.null(df_all$alternate_sample_id)){
+  df_metadata_add$biosample_accession=df_all$alternate_sample_id
+}else{
+  df_metadata_add$biosample_accession<-NA
+}
+
+if (!is.null(df_all$anatomic_site)){
+  df_metadata_add$sample_anatomic_site=df_all$anatomic_site
+}else{
+  df_metadata_add$sample_anatomic_site<-NA
+}
+
+if (!is.null(df_all$diagnosis_finer_resolution)){
+  df_metadata_add$primary_diagnosis=df_all$diagnosis_finer_resolution
+}else{
+  df_metadata_add$primary_diagnosis<-NA
+}
+
+#TEMPLATE 
+#If df_all$col is not null, make it equal a different column.
+#If df_all$col is null, then make that equal column NAs to preserve the spot in the template.
+
+# if (!is.null(df_all$)){
+#   df_metadata_add$=df_all$
+# }else{
+#   df_metadata_add$<-NA
+# }
 
 
 #fix disease_type to only contain Term and remove code.
