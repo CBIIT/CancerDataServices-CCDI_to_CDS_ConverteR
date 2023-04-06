@@ -366,7 +366,7 @@ for (file_url in unique(df_all$file_url_in_cds)){
   position=position+1
   setTxtProgressBar(pb,position)
   if (!is.na(file_url)){
-    file_pos=grep(pattern = file_url, x = df_all$file_url_in_cds)
+    file_pos=grep(pattern = TRUE, x =file_url %in% df_all$file_url_in_cds)
     if (length(file_pos)>1){
       for(row_num in file_pos){
         for(col_num in 1:dim(df_all)[2]){
